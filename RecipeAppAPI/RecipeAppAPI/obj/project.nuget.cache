@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4nFBsKM7L31yvufXYRKbY368Sk+CuYL4iNdau12engOWj67jsv2ZmUF+4gRyTFEMSprwGIhZrLWLj7XhxW2wNg==",
+  "dgSpecHash": "59uX6qhD948xOPN0uclJvoRjLyoPZaZtKMz2AjuE7P7VgOXE+oaaI0ut7rQggOz3QoKRDJeeJQ6CcYnX6PnnKw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\amina\\Documents\\Projekti\\recipeappAPI\\recipeappAPI\\recipeappAPI.csproj",
+  "projectFilePath": "C:\\Users\\amina\\Documents\\Projekti\\RecipeApp\\recipe-app\\RecipeAppAPI\\recipeappAPI\\recipeappAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\amina\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\amina\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

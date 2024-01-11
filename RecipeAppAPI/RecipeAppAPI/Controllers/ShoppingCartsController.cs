@@ -24,23 +24,29 @@ namespace recipeappAPI.Controllers
         }
 
         // GET: api/ShoppingCarts
+       
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShoppingCart>>> GetShoppingCartForRecipe(int savedRecipeId)
+        public async Task<ActionResult<IEnumerable<ShoppingCart>>> GetShoppingCartForRecipe(string recipeUrl, string userId)
         {
-            if (_context.ShoppingCart == null)
+            // Check if the recipe is saved
+            var savedRecipe = await _context.SavedRecipes.FirstOrDefaultAsync(r => r.Url == recipeUrl && r.userId == userId);
+
+            if (savedRecipe == null)
             {
-                return NotFound();
+                // Recipe is not saved, return null or an appropriate response
+                return Ok(); // You can modify this based on your needs
             }
 
-            // Filter shopping cart items for the specific user and saved recipe ID
-            var userShoppingCart = await _context.ShoppingCart
-                .Where(cartItem => cartItem.savedRecipeId == savedRecipeId)
+            // Recipe is saved, retrieve shopping cart items
+            var shoppingCartItems = await _context.ShoppingCart
+                .Where(item => item.savedRecipeId == savedRecipe.Id)
                 .ToListAsync();
 
-            return userShoppingCart;
+            return Ok(shoppingCartItems);
         }
 
-    
+
+
 
         // PUT: api/ShoppingCarts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

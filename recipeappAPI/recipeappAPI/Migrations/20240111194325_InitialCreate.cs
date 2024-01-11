@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace recipeappAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class IdToString : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,6 +66,42 @@ namespace recipeappAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SavedRecipes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Calories = table.Column<int>(type: "int", nullable: false),
+                    Time = table.Column<int>(type: "int", nullable: false),
+                    Servings = table.Column<int>(type: "int", nullable: false),
+                    DietLabels = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfileImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    userId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SavedRecipes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingCart",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    food = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    weight = table.Column<int>(type: "int", nullable: false),
+                    image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    savedRecipeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCart", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,20 +168,21 @@ namespace recipeappAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SavedRecipes",
+                name: "Photos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    uri = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     userId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     appUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SavedRecipes", x => x.Id);
+                    table.PrimaryKey("PK_Photos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SavedRecipes_AppUsers_appUserId",
+                        name: "FK_Photos_AppUsers_appUserId",
                         column: x => x.appUserId,
                         principalTable: "AppUsers",
                         principalColumn: "Id",
@@ -258,28 +295,6 @@ namespace recipeappAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ShoppingCart",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    food = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    weight = table.Column<int>(type: "int", nullable: false),
-                    image = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    savedRecipeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShoppingCart", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ShoppingCart_SavedRecipes_savedRecipeId",
-                        column: x => x.savedRecipeId,
-                        principalTable: "SavedRecipes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -330,14 +345,9 @@ namespace recipeappAPI.Migrations
                 column: "appUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SavedRecipes_appUserId",
-                table: "SavedRecipes",
+                name: "IX_Photos_appUserId",
+                table: "Photos",
                 column: "appUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ShoppingCart_savedRecipeId",
-                table: "ShoppingCart",
-                column: "savedRecipeId");
         }
 
         /// <inheritdoc />
@@ -365,6 +375,12 @@ namespace recipeappAPI.Migrations
                 name: "PastMessages");
 
             migrationBuilder.DropTable(
+                name: "Photos");
+
+            migrationBuilder.DropTable(
+                name: "SavedRecipes");
+
+            migrationBuilder.DropTable(
                 name: "ShoppingCart");
 
             migrationBuilder.DropTable(
@@ -375,9 +391,6 @@ namespace recipeappAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "SavedRecipes");
 
             migrationBuilder.DropTable(
                 name: "AppUsers");

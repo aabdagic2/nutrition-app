@@ -4,7 +4,7 @@
   </head>
   <div class="container">
 <div class="search-container">
-  <input class="search-input" type="text" [(ngModel)]="searchTerm" placeholder="Search recipes...">
+  <input class="search-input" type="text" [(ngModel)]="searchTerm" placeholder="Search recipes..." (keyup.enter)="updateItems()">
 <button class="search-button" type="submit" (click)="updateItems()"><i class="fas fa-search"></i></button>
 </div>
 <div class="recipe-cards">
@@ -37,7 +37,21 @@
           <i class="fas fa-heart full-heart" (click)="toggleSaveRecipe(recipe)"></i>
       </div></div>
       <a [href]="recipe.recipeUrl" target="_blank" class="custom-link">Recipe Link</a>
-   
+      
+      <div class="shopping-cart" >
+        <div class="cart">
+          <i class="fas fa-shopping-cart"></i>
+          Shopping Cart
+        </div>
+      
+        <ul class="food" >
+          <!-- Loop through shopping cart items -->
+          <li *ngFor="let item of recipe.cart">
+            <button class="shopping-cart-button" (click)="deleteShoppingItem(item,recipe)"><i class="fas fa-minus" style="color: red;"></i></button> {{ item.food }}
+          </li>
+        </ul>
+      </div>
+      
   </div>
 </div>
 </div>

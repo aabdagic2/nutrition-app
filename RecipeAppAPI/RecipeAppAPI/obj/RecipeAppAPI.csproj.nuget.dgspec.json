@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\amina\\Documents\\Projekti\\recipeappAPI\\recipeappAPI\\recipeappAPI.csproj": {}
+    "C:\\Users\\amina\\Documents\\Projekti\\RecipeApp\\recipe-app\\RecipeAppAPI\\recipeappAPI\\recipeappAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\amina\\Documents\\Projekti\\recipeappAPI\\recipeappAPI\\recipeappAPI.csproj": {
+    "C:\\Users\\amina\\Documents\\Projekti\\RecipeApp\\recipe-app\\RecipeAppAPI\\recipeappAPI\\recipeappAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\amina\\Documents\\Projekti\\recipeappAPI\\recipeappAPI\\recipeappAPI.csproj",
+        "projectUniqueName": "C:\\Users\\amina\\Documents\\Projekti\\RecipeApp\\recipe-app\\RecipeAppAPI\\recipeappAPI\\recipeappAPI.csproj",
         "projectName": "recipeappAPI",
-        "projectPath": "C:\\Users\\amina\\Documents\\Projekti\\recipeappAPI\\recipeappAPI\\recipeappAPI.csproj",
+        "projectPath": "C:\\Users\\amina\\Documents\\Projekti\\RecipeApp\\recipe-app\\RecipeAppAPI\\recipeappAPI\\recipeappAPI.csproj",
         "packagesPath": "C:\\Users\\amina\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\amina\\Documents\\Projekti\\recipeappAPI\\recipeappAPI\\obj\\",
+        "outputPath": "C:\\Users\\amina\\Documents\\Projekti\\RecipeApp\\recipe-app\\recipeappAPI\\recipeappAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\amina\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -29,7 +29,7 @@ public chart: any;
     this.recipeId = this.route.snapshot.paramMap.get('id');
     var rec=await this.recipeService.getRecipe(this.recipeId);
     if(rec.length!=0){
-      this.recipe =rec[0];
+      this.recipe ={title: rec[0].title, image: rec[0].image, description: rec[0].description, calories: rec[0].calories,dietLabels:rec[0].dietLabels,saved:rec[0].saved, url:rec[0].url,servings:rec[0].servings, time:rec[0].time,totalNutrients:rec[0].totalNutrients, ingredients:[],source: rec[0].source,healthLabels:rec[0].healthLabels };
       const response: any= await this.http.get('https://localhost:7178/recipe?userId='+this.cookieService.get('user')+'&url='+this.recipe.url.toString()).toPromise();
       if(response!=null){
        this.recipe.saved=true;
@@ -38,14 +38,25 @@ public chart: any;
       else{
         this.recipe.saved=false;
       }
-    
+      const res:any=await this.http.get('https://localhost:7178/api/ShoppingCarts?recipeUrl='+this.recipe.url+'&userId='+this.cookieService.get('user')).toPromise()
+      console.log(res)
       rec[0].ingredients.forEach(element => {
-        this.recipe?.ingredients.push({
-          text: element.text,
-          quantity: element.quantity,
-          measure: element.measure,
-          isInCart: false
-        });
+        console.log(element)
+        if(res!=null&&res.some((resItem: any) => resItem.food === element)){
+         this.recipe?.ingredients.push({
+          text: element,
+          quantity: 0,
+          measure: '',
+          isInCart: true
+        });}
+        else{
+          this.recipe?.ingredients.push({
+            text: element,
+            quantity: 0,
+            measure: '',
+            isInCart: false
+          }); 
+        }
       });
    /* var sr=await this.recipeService.getSavedRecipes();
     for(let i=0;i<sr.length;i++)
@@ -58,13 +69,13 @@ break;
   
   }
 
-  addToShoppingCart(recipeUrl: string, ingredient: { text: string, quantity: number, measure: string, isInCart: boolean }) {
+  async addToShoppingCart(recipeUrl: string, ingredient: { text: string, quantity: number, measure: string, isInCart: boolean }) {
     const foundIngredient = this.recipe?.ingredients.find(ing => ing.text === ingredient.text);
     if (foundIngredient) {
       foundIngredient.isInCart = !foundIngredient.isInCart;
       if(foundIngredient.isInCart){
       {
-        const rec=this.http.post('https://localhost:7178/api/ShoppingCarts/AddToShoppingCart',
+        const rec:any=await this.http.post('https://localhost:7178/api/ShoppingCarts/AddToShoppingCart',
        { recipe: {
     title: this.recipe.title,
     calories: this.recipe.calories,
@@ -83,11 +94,13 @@ break;
         }
       }).toPromise();
       console.log(rec);
+      this.savedId=rec?.savedRecipeId;
+      this.recipe.saved=true;
       }
     
     }
     else{
-      const rec=this.http.delete('https://localhost:7178/api/ShoppingCarts?SavedId='+this.savedId+'&food='+ingredient.text);
+      const rec=await this.http.delete('https://localhost:7178/api/ShoppingCarts?SavedId='+this.savedId+'&food='+ingredient.text).toPromise();
     }
   }}
   

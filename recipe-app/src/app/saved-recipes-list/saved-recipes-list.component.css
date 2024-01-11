@@ -344,3 +344,41 @@ color: #ffffff !important;
 input[type='checkbox']:after {
   box-shadow: none !important;
 }
+.shopping-cart {
+  background-color: #5ba006;
+  color: white;
+  margin: 0px;
+  width: 300px;
+  padding: 15px;
+  min-height: 100%; /* Adjust this value as needed */
+}
+
+.cart {
+  background-color: #5ba006;
+  color: white;
+  font-size: larger;
+  padding-bottom: 5px;
+}
+
+.food {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.shopping-cart-button {
+  width: 20px;
+  height: 20px;
+  border: 2px solid white; /* Initial white border */
+  border-radius: 50%; /* Circular shape */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.3s, background-color 0.3s;
+  border-color: red;
+  margin-right: 10px;
+}
+.food li {
+  display: flex;
+  align-items: baseline; /* Align items vertically */
+
+}

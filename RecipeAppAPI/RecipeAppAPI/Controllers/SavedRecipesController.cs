@@ -134,22 +134,41 @@ namespace recipeappAPI.Controllers
         {
             if (_context.SavedRecipes == null)
             {
-                return NotFound();
+                return NotFound("SavedRecipes DbSet is null");
             }
 
-            var savedRecipe = await _context.SavedRecipes.FirstOrDefaultAsync(r => r.userId == userId && r.Url == url);
-
-            if (savedRecipe == null)
+            try
             {
-                return NotFound();
+                var savedRecipe = await _context.SavedRecipes
+                    .FirstOrDefaultAsync(r => r.userId == userId && r.Url == url);
+
+                if (savedRecipe == null)
+                {
+                    return NotFound("SavedRecipe not found");
+                }
+
+                // Remove shopping cart items associated with the savedRecipe
+                var shoppingCartItems = await _context.ShoppingCart
+                    .Where(item => item.savedRecipeId == savedRecipe.Id)
+                    .ToListAsync();
+
+                _context.ShoppingCart.RemoveRange(shoppingCartItems);
+                await _context.SaveChangesAsync();
+                // Remove the saved recipe
+                _context.SavedRecipes.Remove(savedRecipe);
+
+                await _context.SaveChangesAsync();
+
+                return Ok();
             }
-
-            _context.SavedRecipes.Remove(savedRecipe);
-            await _context.SaveChangesAsync();
-
-            return Ok();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
-     
+
+
+
 
         private bool SavedRecipeExists(int id)
         {

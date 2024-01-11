@@ -79,55 +79,101 @@ console.log(response);
     }
   }
 
-  async getRecipe(name:string|null): Promise<{ title: string; image: string; description: string; calories: number;dietLabels:string[];saved:boolean; url:string;servings:number; time:number;totalNutrients:any; ingredients:{
-    text: string,
-    quantity: 0,
-    measure: string,isInCart:boolean}[],source: string,healthLabels:string[] }[]> {
+  async getRecipe(name: string | null): Promise<{
+    title: string;
+    image: string;
+    description: string;
+    calories: number;
+    dietLabels: string[];
+    saved: boolean;
+    url: string;
+    servings: number;
+    time: number;
+    totalNutrients: any;
+    ingredients: string[];
+    source: string;
+    healthLabels: string[];
+  }[]> {
     try {
-      const response = await this.http.get<any>('https://localhost:7178/api/recipes/GetRecipeByName/'+name).toPromise();
+      const response = await this.http.get<any>('https://localhost:7178/api/recipes/GetRecipeByName/' + name).toPromise();
       const hits = response["hits"];
-      const rec: {  title: string; image: string; description: string; calories: number;dietLabels:string[],saved:boolean,url:string, servings:number, time:number,totalNutrients:any; ingredients:{
-        text: string,
-        quantity: 0,
-        measure: string, isInCart: boolean}[],source: string, healthLabels:string[] }[] = [];
-      hits.forEach((hit: any) => {
-        const recipe = hit.recipe;
-         console.log(recipe.totalNutrients)
-        const label: string = recipe.label;
-        const image: string = recipe.image;
-        const source: string = recipe.source;
-        const url: string = recipe.url;
-        const healthLabels: string[]=recipe.healthLabels;
-        let description: string = Number(recipe.calories).toString() + ", ";
-        const ingredients:{
-            text: string,
-            quantity: 0,
-            measure: string, isInCart: boolean}[]=[];
-            recipe.ingredients.forEach((element:  {
-              text: string,
-              quantity: 0,
-              measure: string,
-              food: string,
-              weight: 0,
-              foodId: string
-            })=>{
-              ingredients.push({text:element.text,quantity:element.quantity, measure: element.measure,isInCart: false})
-            });
-           var instructions: string[]=[];
-           if(recipe.instructions!=undefined)
-           recipe.instructions.forEach((element:string)=>{instructions.push(element);});
-          
+        
+      const rec: {
+        title: string;
+        image: string;
+        description: string;
+        calories: number;
+        dietLabels: string[];
+        saved: boolean;
+        url: string;
+        servings: number;
+        time: number;
+        totalNutrients: any;
+        ingredients: string[];
+        source: string;
+        healthLabels: string[];
+      }[] = [];
+  
+      const recipe = hits[0].recipe;
+      console.log(recipe)
+  
+      const label: string = recipe.label;
+      const image: string = recipe.image;
+      const source: string = recipe.source;
+      const url: string = recipe.url;
+      const healthLabels: string[] = recipe.healthLabels;
+      let description: string = Number(recipe.calories).toString() + ", ";
+      const uniqueIngredients: Set<string> = new Set();
+      const ingredientss: {
+        text: string;
+        quantity: 0;
+        measure: string;
+        isInCart: boolean;
+      }[] = [];
+     let ingr:string[]=[];
+      if (recipe.ingredients) {
+        ingr=[];
+        const elements: any[] = [];
+        console.log(ingr)
+        for(let i=0;i<recipe.ingredients.length;i++){
+            ingr.push(recipe.ingredients[i].text
+            );
+       
+            console.log(ingr);
+     }
       
-
-        rec.push({ title: label, image: image, description: description, calories: Math.round(recipe.calories/recipe.yield),dietLabels: recipe.dietLabels,saved:false, url:recipe.url, servings:recipe.yield, time:recipe.totalTime,totalNutrients: recipe.totalNutrients,ingredients,source,healthLabels });
-      });
-
-      return rec;
+      
+      }
+  
+   
+  
+    
+  
+    let  rec1={
+        title: label,
+        image: image,
+        description: description,
+        calories: Math.round(recipe.calories / recipe.yield),
+        dietLabels: recipe.dietLabels,
+        saved: false,
+        url: recipe.url,
+        servings: recipe.yield,
+        time: recipe.totalTime,
+        totalNutrients: recipe.totalNutrients,
+        ingredients: ingr,
+        source:source,
+        healthLabels:healthLabels,
+      };
+      console.log(rec1)
+      let r=[]
+      r.push(rec1);
+      return r;
     } catch (error) {
       console.error(error);
       return [];
     }
   }
+  
   async getSavedRecipes():Promise<{ title: string; image: string; dietLabels: string[]; recipeUrl:string;servings:number,time:number,calories:number }[] >{
     const response = await this.http.get<any>('https://localhost:7178/api/SavedRecipes?userId='+this.cookieService.get('user')).toPromise();
     const hits = response["hits"];
@@ -186,6 +232,55 @@ console.log(response);
         return [];
       })
     );
+  }
+  async getFilteredRecipes(name:string|null): Promise<{ title: string; image: string; description: string; calories: number;dietLabels:string[];saved:boolean; url:string;servings:number; time:number;totalNutrients:any; ingredients:{
+    text: string,
+    quantity: 0,
+    measure: string,isInCart:boolean}[],source: string,healthLabels:string[] }[]> {
+    try {
+      const response = await this.http.get<any>('https://localhost:7178/api/recipes/GetRecipeByName/'+name).toPromise();
+      const hits = response["hits"];
+      const rec: {  title: string; image: string; description: string; calories: number;dietLabels:string[],saved:boolean,url:string, servings:number, time:number,totalNutrients:any; ingredients:{
+        text: string,
+        quantity: 0,
+        measure: string, isInCart: boolean}[],source: string, healthLabels:string[] }[] = [];
+      hits.forEach((hit: any) => {
+        const recipe = hit.recipe;
+         console.log(recipe.totalNutrients)
+        const label: string = recipe.label;
+        const image: string = recipe.image;
+        const source: string = recipe.source;
+        const url: string = recipe.url;
+        const healthLabels: string[]=recipe.healthLabels;
+        let description: string = Number(recipe.calories).toString() + ", ";
+        const ingredients:{
+            text: string,
+            quantity: 0,
+            measure: string, isInCart: boolean}[]=[];
+            recipe.ingredients.forEach((element:  {
+              text: string,
+              quantity: 0,
+              measure: string,
+              food: string,
+              weight: 0,
+              foodId: string
+            })=>{
+              ingredients.push({text:element.text,quantity:element.quantity, measure: element.measure,isInCart: false})
+            });
+           var instructions: string[]=[];
+           if(recipe.instructions!=undefined)
+           recipe.instructions.forEach((element:string)=>{instructions.push(element);});
+          
+      
+
+        rec.push({ title: label, image: image, description: description, calories: Math.round(recipe.calories/recipe.yield),dietLabels: recipe.dietLabels,saved:false, url:recipe.url, servings:recipe.yield, time:recipe.totalTime,totalNutrients: recipe.totalNutrients,ingredients,source,healthLabels });
+      });
+
+      return rec;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   }
   getRecipesByHealth(healthTags: string[],dietTags:string[],searchTerm:string,minCalories:number=-Infinity,maxCalories:number=Infinity): Observable<{ title: string; image: string; description: string; calories: number; dietLabels: string[]; saved: boolean; source: string; url: string; servings: number; time: number,healthLabels:string[] }[]> {
     

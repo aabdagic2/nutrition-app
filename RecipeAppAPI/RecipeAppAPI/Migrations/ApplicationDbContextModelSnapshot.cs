@@ -441,8 +441,6 @@ namespace recipeappAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("savedRecipeId");
-
                     b.ToTable("ShoppingCart", (string)null);
                 });
 
@@ -546,17 +544,6 @@ namespace recipeappAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("appUser");
-                });
-
-            modelBuilder.Entity("recipeappAPI.Models.ShoppingCart", b =>
-                {
-                    b.HasOne("recipeappAPI.Models.SavedRecipe", "savedRecipe")
-                        .WithMany()
-                        .HasForeignKey("savedRecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("savedRecipe");
                 });
 #pragma warning restore 612, 618
         }

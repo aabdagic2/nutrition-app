@@ -126,12 +126,70 @@ export class RecipeListComponent {
   });
  }
   searchTerm: string = '';
+  Page:number=1;
+  async getRecipes(): Promise<void> {
+    try {
+      const response = await this.http.get<any>(`https://localhost:7178/GetPage/${this.Page}`).toPromise();
+      const hits = response["hits"];
+      const rec: { title: string; image: string; description: string; calories: number; dietLabels: string[]; saved: boolean; source: string; url: string; servings: number; time: number, healthLabels: string[] }[] = [];
+
+      hits.forEach((hit: any) => {
+        const recipe = hit.recipe;
+        const label: string = recipe.label;
+        const image: string = recipe.image;
+        const source: string = recipe.source;
+        const url: string = recipe.url;
+        let description: string = Number(recipe.calories).toString() + ", ";
+
+        recipe.dietLabels.forEach((element: string) => {
+          description += element + "kcal , ";
+        });
+
+        rec.push({ title: label, image: image, description: description, calories: Math.round(recipe.calories / recipe.yield), dietLabels: recipe.dietLabels, saved: false, source: source, url: url, servings: recipe.yield, time: recipe.totalTime, healthLabels: recipe.healthLabels });
+      });
+
+      this.filteredRecipes = rec;
+    } catch (error) {
+      console.error(error);
+      this.filteredRecipes = [];
+    }
+  }
+
+  nextPage(): void {
+    this.Page++;
+    this.getRecipes();
+  }
+
+  prevPage(): void {
+    if (this.Page != 1) {
+      this.Page--;
+      this.getRecipes();
+    }
+  }
+
+  goToPage(page: number): void {
+    this.Page = page;
+    this.getRecipes();
+  }
+  getPages(): number[] {
+    const arr: number[] = [];
+    // You need to implement a function to calculate the total number of pages
+
+    const startPage = Math.max(1, this.Page - 3);
+    const endPage = this.Page + 3;
+
+    for (let i = startPage; i <= endPage; i++) {
+        arr.push(i);
+    }
+
+    return arr;
+}
   async updateItems(): Promise<void> {
     if(this.searchTerm==''){
       this.filteredRecipes=await this.recipeService.getRecipes();
        }
        else{
- this.filteredRecipes=await this.recipeService.getRecipe(this.searchTerm);
+ this.filteredRecipes=await this.recipeService.getFilteredRecipes(this.searchTerm);
        }
   }
   navigateToSource(url: string): void {

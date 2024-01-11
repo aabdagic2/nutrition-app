@@ -12,8 +12,8 @@ using recipeappAPI.Data;
 namespace recipeappAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231111223325_SavedRecMig")]
-    partial class SavedRecMig
+    [Migration("20240111194325_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -393,6 +393,10 @@ namespace recipeappAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProfileImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Servings")
                         .HasColumnType("int");
 
@@ -439,8 +443,6 @@ namespace recipeappAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("savedRecipeId");
 
                     b.ToTable("ShoppingCart", (string)null);
                 });
@@ -545,17 +547,6 @@ namespace recipeappAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("appUser");
-                });
-
-            modelBuilder.Entity("recipeappAPI.Models.ShoppingCart", b =>
-                {
-                    b.HasOne("recipeappAPI.Models.SavedRecipe", "savedRecipe")
-                        .WithMany()
-                        .HasForeignKey("savedRecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("savedRecipe");
                 });
 #pragma warning restore 612, 618
         }
